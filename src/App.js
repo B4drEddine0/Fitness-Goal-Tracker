@@ -12,25 +12,59 @@ function App() {
   useEffect(() => {
     const savedGoals = localStorage.getItem('fitnessGoals');
     if (savedGoals) {
-      setGoals(JSON.parse(savedGoals));
+      try {
+        const parsedGoals = JSON.parse(savedGoals);
+        setGoals(parsedGoals);
+        
+        // If there was a selected goal, try to restore it
+        const savedSelectedGoalId = localStorage.getItem('selectedGoalId');
+        if (savedSelectedGoalId) {
+          const selectedGoal = parsedGoals.find(goal => goal.id.toString() === savedSelectedGoalId);
+          if (selectedGoal) {
+            setSelectedGoal(selectedGoal);
+          }
+        }
+      } catch (error) {
+        console.error('Error parsing saved goals:', error);
+        localStorage.removeItem('fitnessGoals');
+      }
     }
   }, []);
 
   // Save goals to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('fitnessGoals', JSON.stringify(goals));
-  }, [goals]);
+    
+    // Also save the selected goal ID if there is one
+    if (selectedGoal) {
+      localStorage.setItem('selectedGoalId', selectedGoal.id);
+    } else {
+      localStorage.removeItem('selectedGoalId');
+    }
+  }, [goals, selectedGoal]);
 
   // Add a new goal
   const addGoal = (newGoal) => {
-    setGoals([...goals, { ...newGoal, id: Date.now(), progress: [] }]);
+    const goalWithId = { 
+      ...newGoal, 
+      id: Date.now(), 
+      progress: [],
+      createdAt: new Date().toISOString()
+    };
+    setGoals([...goals, goalWithId]);
   };
 
   // Update an existing goal
   const updateGoal = (updatedGoal) => {
-    setGoals(goals.map(goal => 
+    const updatedGoals = goals.map(goal => 
       goal.id === updatedGoal.id ? updatedGoal : goal
-    ));
+    );
+    setGoals(updatedGoals);
+    
+    // If the updated goal is the selected one, update the selected goal state too
+    if (selectedGoal && selectedGoal.id === updatedGoal.id) {
+      setSelectedGoal(updatedGoal);
+    }
   };
 
   // Delete a goal
@@ -43,15 +77,30 @@ function App() {
 
   // Add progress to a goal
   const addProgress = (goalId, progressData) => {
-    setGoals(goals.map(goal => {
+    const updatedGoals = goals.map(goal => {
       if (goal.id === goalId) {
-        return {
-          ...goal,
-          progress: [...goal.progress, { ...progressData, date: new Date().toISOString().split('T')[0] }]
+        const newProgress = { 
+          ...progressData, 
+          date: new Date().toISOString().split('T')[0],
+          id: Date.now() // Add unique ID for each progress entry
         };
+        
+        const updatedGoal = {
+          ...goal,
+          progress: [...goal.progress, newProgress]
+        };
+        
+        // If this is the selected goal, update the selected goal state too
+        if (selectedGoal && selectedGoal.id === goalId) {
+          setSelectedGoal(updatedGoal);
+        }
+        
+        return updatedGoal;
       }
       return goal;
-    }));
+    });
+    
+    setGoals(updatedGoals);
   };
 
   return (
@@ -92,7 +141,7 @@ function App() {
             </div>
             
             <div className="card">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Résumé des Performances</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Statistiques</h2>
               <PerformanceSummary goals={goals} />
             </div>
           </div>
