@@ -34,3 +34,37 @@ Fitness Goal Tracker helps you set, track, and achieve your fitness goals. Wheth
 git clone https://github.com/yourusername/fitness-goal-tracker.git
 cd fitness-goal-tracker
 ```
+2. Install dependencies:
+```bash
+npm install
+ ```
+
+3. Start the development server:
+```bash
+npm start
+ ```
+
+4. Open http://localhost:3000 to view the app in your browser.
+
+Project Structure
+
+fitness-goal-tracker/
+├── public/                 # Public assets
+├── src/                    # Source files
+│   ├── components/         # React components
+│   │   ├── GoalForm.js     # Form for creating/editing goals
+│   │   ├── GoalList.js     # List of all goals
+│   │   ├── ProgressForm.js # Form for tracking daily progress
+│   │   └── PerformanceSummary.js # Summary of achievements
+│   ├── App.js              # Main application component
+│   ├── index.js            # Application entry point
+│   └── index.css           # Global styles and Tailwind configuration
+├── tailwind.config.js      # Tailwind CSS configuration
+└── package.json            # Project dependencies and scripts
+
+
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
+Acknowledgments
+Tailwind CSS for providing a utility-first CSS framework.
+React.js for building the user interface.
