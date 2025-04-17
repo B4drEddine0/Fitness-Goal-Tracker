@@ -5,10 +5,11 @@ import ProgressForm from './components/ProgressForm';
 import PerformanceSummary from './components/PerformanceSummary';
 
 function App() {
-  const [goals, setGoals] = useState([]);
+  const [goals, setGoals] = useState(()=>{const savedGoals = localStorage.getItem('fitnessGoals');
+    return savedGoals ? JSON.parse(savedGoals) : [];}) ;
   const [selectedGoal, setSelectedGoal] = useState(null);
 
-  // Load goals from localStorage when the app starts
+
   useEffect(() => {
     const savedGoals = localStorage.getItem('fitnessGoals');
     if (savedGoals) {
@@ -16,7 +17,6 @@ function App() {
         const parsedGoals = JSON.parse(savedGoals);
         setGoals(parsedGoals);
         
-        // If there was a selected goal, try to restore it
         const savedSelectedGoalId = localStorage.getItem('selectedGoalId');
         if (savedSelectedGoalId) {
           const selectedGoal = parsedGoals.find(goal => goal.id.toString() === savedSelectedGoalId);
@@ -31,11 +31,10 @@ function App() {
     }
   }, []);
 
-  // Save goals to localStorage whenever they change
+
   useEffect(() => {
     localStorage.setItem('fitnessGoals', JSON.stringify(goals));
     
-    // Also save the selected goal ID if there is one
     if (selectedGoal) {
       localStorage.setItem('selectedGoalId', selectedGoal.id);
     } else {
@@ -43,7 +42,6 @@ function App() {
     }
   }, [goals, selectedGoal]);
 
-  // Add a new goal
   const addGoal = (newGoal) => {
     const goalWithId = { 
       ...newGoal, 
@@ -54,7 +52,6 @@ function App() {
     setGoals([...goals, goalWithId]);
   };
 
-  // Update an existing goal
   const updateGoal = (updatedGoal) => {
     const updatedGoals = goals.map(goal => 
       goal.id === updatedGoal.id ? updatedGoal : goal

@@ -20,7 +20,6 @@ function GoalForm({ addGoal }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Simple validation
     if (!goalData.title || !goalData.target || !goalData.unit) {
       alert('Veuillez remplir tous les champs obligatoires');
       return;
@@ -32,7 +31,7 @@ function GoalForm({ addGoal }) {
       createdAt: new Date().toISOString()
     });
     
-    // Reset form
+   
     setGoalData({
       title: '',
       description: '',

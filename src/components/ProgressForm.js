@@ -5,7 +5,6 @@ function ProgressForm({ goal, addProgress }) {
   const [todayProgress, setTodayProgress] = useState(null);
 
   useEffect(() => {
-    // Check if there's already progress for today
     if (goal && goal.progress) {
       const today = new Date().toISOString().split('T')[0];
       const progress = goal.progress.find(p => p.date === today);

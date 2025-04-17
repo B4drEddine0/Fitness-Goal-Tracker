@@ -1,14 +1,12 @@
 import React from 'react';
 
 function PerformanceSummary({ goals }) {
-  // Calculate basic statistics
+
   const calculateStats = () => {
     const today = new Date().toISOString().split('T')[0];
     
-    // Count total goals
     const totalGoals = goals.length;
     
-    // Count goals with progress today
     let goalsTrackedToday = 0;
     let goalsAchievedToday = 0;
     

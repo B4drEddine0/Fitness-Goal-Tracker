@@ -29,7 +29,7 @@ function GoalList({ goals, deleteGoal, updateGoal, selectGoal, selectedGoalId })
   const calculateProgress = (goal) => {
     if (!goal.progress || goal.progress.length === 0) return 0;
     
-    // Get today's progress
+    
     const today = new Date().toISOString().split('T')[0];
     const todayProgress = goal.progress.find(p => p.date === today);
     
@@ -42,7 +42,7 @@ function GoalList({ goals, deleteGoal, updateGoal, selectGoal, selectedGoalId })
   const getLatestProgressValue = (goal) => {
     if (!goal.progress || goal.progress.length === 0) return 0;
     
-    // Sort progress by date (newest first) and get the first one
+    
     const sortedProgress = [...goal.progress].sort((a, b) => 
       new Date(b.date) - new Date(a.date)
     );
@@ -72,7 +72,6 @@ function GoalList({ goals, deleteGoal, updateGoal, selectGoal, selectedGoalId })
           style={{ cursor: 'pointer' }}
         >
           {editingGoalId === goal.id ? (
-            // Edit form
             <div className="p-2">
               <div className="mb-3">
                 <input
@@ -129,7 +128,7 @@ function GoalList({ goals, deleteGoal, updateGoal, selectGoal, selectedGoalId })
               </div>
             </div>
           ) : (
-            // Display goal
+         
             <div>
               <div className="flex justify-between items-start">
                 <h3 className="text-lg font-semibold text-gray-800">{goal.title}</h3>
